@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         WsManager wsManager = new WsManager();
-        OkHttpWebSocketStrategy build = new OkHttpWebSocketStrategy.Builder(this).wsUrl("").wsStatusListener(new WsStatusListener() {
+        OkHttpWebSocketStrategy build = new OkHttpWebSocketStrategy.Builder(this).wsUrl("ws://172.22.35.176:9999/websocket").wsStatusListener(new WsStatusListener() {
             @Override
             public void onOpen(Response response) {
                 super.onOpen(response);
