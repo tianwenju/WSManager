@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -15,6 +16,8 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @description :
@@ -48,6 +51,7 @@ public class OkHttpWebSocketStrategy implements BaseWebSocketStrategy {
 
         @Override
         public void onOpen(WebSocket webSocket, Response response) {
+            Log.e(TAG, "onOpen: "+"sdf");
             mWebSocket = webSocket;
             mCurrentStatus = WsStatus.CONNECTED;
             connected();
@@ -61,6 +65,7 @@ public class OkHttpWebSocketStrategy implements BaseWebSocketStrategy {
 
         @Override
         public void onMessage(final WebSocket webSocket, String text) {
+            Log.e(TAG, "onMessage: "+text);
             if (wsStatusListener != null) wsStatusListener.onMessage(text);
         }
 
@@ -85,6 +90,7 @@ public class OkHttpWebSocketStrategy implements BaseWebSocketStrategy {
         mContext = builder.mContext;
         wsUrl = builder.wsUrl;
         mOkHttpClient = builder.mOkHttpClient;
+        this.wsStatusListener=builder.wsStatusListener;
         this.mLock = new ReentrantLock();
     }
 

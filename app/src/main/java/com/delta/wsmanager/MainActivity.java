@@ -1,7 +1,9 @@
 package com.delta.wsmanager;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 
 import okhttp3.Response;
 import okio.ByteString;
@@ -11,22 +13,28 @@ import okio.ByteString;
  * @description :
  * @date : 2017/3/3 14:38
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "MainActivity";
+    private WsManager wsManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WsManager wsManager = new WsManager();
-        OkHttpWebSocketStrategy build = new OkHttpWebSocketStrategy.Builder(this).wsUrl("ws://172.22.35.176:9999/websocket").wsStatusListener(new WsStatusListener() {
+        wsManager = new WsManager();
+        OkHttpWebSocketStrategy build = new OkHttpWebSocketStrategy.Builder(this).wsUrl("ws://172.22.35.176:9090/websocket").wsStatusListener(new WsStatusListener() {
             @Override
             public void onOpen(Response response) {
+                Log.e(TAG, "onOpen: "+response.toString());
                 super.onOpen(response);
             }
 
             @Override
             public void onMessage(String text) {
+                Log.e(TAG, "onMessage: "+text);
                 super.onMessage(text);
             }
 
@@ -56,8 +64,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }).build();
         wsManager.setBaseWebSocketStrategy(build);
-        wsManager.startConnect();
-        wsManager.sendMessage("sdf");
+        findViewById(R.id.bt_contect).setOnClickListener(this);
+        findViewById(R.id.bt_send).setOnClickListener(this);
+        findViewById(R.id.bt_stop).setOnClickListener(this);
+    }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_contect:
+                wsManager.startConnect();
+                break;
+            case R.id.bt_send:
+                wsManager.sendMessage("sdfsdf");
+                break;
+            case R.id.bt_stop:
+                wsManager.stopConnect();
+                break;
+            default:
+                break;
+        }
     }
 }
